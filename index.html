@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Drama Show Ticket Booking</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            padding: 20px;
+
+        }
+
+        .seat-map {
+
+            display: grid;
+
+            grid-template-columns: repeat(30, 25px);
+
+            gap: 5px;
+
+            margin-bottom: 20px;
+
+        }
+
+        .seat {
+
+            width: 25px;
+
+            height: 25px;
+
+            background-color: #ccc;
+
+            text-align: center;
+
+            line-height: 25px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+
+        }
+
+        .seat.premium {
+
+            background-color: #add8e6;
+
+        }
+
+        .seat.economy {
+
+            background-color: #90ee90;
+
+        }
+
+        .seat.selected {
+
+            background-color: #ff6347 !important;
+
+        }
+
+        .info {
+
+            margin-bottom: 10px;
+
+        }
+
+        .form-section {
+
+            margin-top: 20px;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h2>Drama Show Ticket Booking</h2>
+
+    <div class="info" id="selectedSeats">Selected Seats: None</div>
+
+    <div class="info" id="totalPrice">Total Price: ₹0</div>
+
+    <div class="seat-map" id="seatMap"></div>
+
+ 
+
+    <div class="form-section">
+
+        <h3>User Details</h3>
+
+        <form>
+
+            <label>Name: <input type="text" name="name" required></label><br><br>
+
+            <label>Email: <input type="email" name="email" required></label><br><br>
+
+            <button type="button">Dummy Payment</button>
+
+        </form>
+
+    </div>
+
+ 
+
+    <script>
+
+        const seatMap = document.getElementById('seatMap');
+
+        const selectedSeatsDisplay = document.getElementById('selectedSeats');
+
+        const totalPriceDisplay = document.getElementById('totalPrice');
+
+        const selectedSeats = [];
+
+        let totalPrice = 0;
+
+ 
+
+        const rows = [...'ABCDEFGHIJKLMNOPQRST'];
+
+        const columns = Array.from({length: 30}, (_, i) => i + 1);
+
+ 
+
+        rows.forEach(row => {
+
+            columns.forEach(col => {
+
+                const seat = document.createElement('div');
+
+                seat.classList.add('seat');
+
+                seat.textContent = row + col;
+
+ 
+
+                if (rows.indexOf(row) < 10) {
+
+                    seat.classList.add('premium');
+
+                    seat.dataset.price = 500;
+
+                } else {
+
+                    seat.classList.add('economy');
+
+                    seat.dataset.price = 300;
+
+                }
+
+ 
+
+                seat.addEventListener('click', () => {
+
+                    const seatId = row + col;
+
+                    if (selectedSeats.includes(seatId)) {
+
+                        selectedSeats.splice(selectedSeats.indexOf(seatId), 1);
+
+                        totalPrice -= parseInt(seat.dataset.price);
+
+                        seat.classList.remove('selected');
+
+                    } else {
+
+                        selectedSeats.push(seatId);
+
+                        totalPrice += parseInt(seat.dataset.price);
+
+                        seat.classList.add('selected');
+
+                    }
+
+                    selectedSeatsDisplay.textContent = "Selected Seats: " + (selectedSeats.length ? selectedSeats.join(', ') : "None");
+
+                    totalPriceDisplay.textContent = "Total Price: ₹" + totalPrice;
+
+                });
+
+ 
+
+                seatMap.appendChild(seat);
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>
